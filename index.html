@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>My Small Business</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;800&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #fff8f0;
+        --card: #fff;
+        --ink: #2d2420;
+        --mute: #8a7d73;
+        --acc: #e4572e;
+        --acc2: #f6a04d;
+        --line: #f0e3d6;
+        --ok: #16a34a;
+        --r: 16px;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #171210;
+          --card: #241d19;
+          --ink: #f6ece3;
+          --mute: #a89b90;
+          --acc: #ff7a4d;
+          --acc2: #f6a04d;
+          --line: #3a2f28;
+          --ok: #4ade80;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font:
+          16px/1.5 Inter,
+          system-ui,
+          sans-serif;
+      }
+      h1,
+      h2,
+      h3 {
+        font-family: Fraunces, Georgia, serif;
+        margin: 0;
+      }
+      .hero {
+        background: linear-gradient(135deg, var(--acc), var(--acc2));
+        color: #fff;
+        padding: 32px 16px 56px;
+        text-align: center;
+      }
+      .hero h1 {
+        font-size: 2.2rem;
+        font-weight: 800;
+      }
+      .hero p {
+        margin: 6px 0 0;
+        opacity: 0.9;
+      }
+      .wrap {
+        max-width: 760px;
+        margin: -36px auto 40px;
+        padding: 0 16px;
+      }
+      .nav {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+      button,
+      input,
+      textarea {
+        font: inherit;
+        color: inherit;
+      }
+      button {
+        background: var(--acc);
+        color: #fff;
+        border: 0;
+        border-radius: 999px;
+        padding: 10px 18px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.15s;
+      }
+      button:hover {
+        filter: brightness(1.08);
+        transform: translateY(-1px);
+      }
+      button.ghost {
+        background: var(--card);
+        color: var(--ink);
+        border: 1px solid var(--line);
+      }
+      button.on {
+        background: var(--ink);
+        color: var(--bg);
+      }
+      button.sm {
+        padding: 5px 12px;
+        font-size: 0.85rem;
+      }
+      input,
+      textarea,
+      select {
+        width: 100%;
+        background: var(--bg);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 11px 13px;
+        margin: 4px 0 12px;
+      }
+      input:focus,
+      textarea:focus,
+      select:focus {
+        outline: 2px solid var(--acc2);
+        border-color: transparent;
+      }
+      label {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--mute);
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: var(--r);
+        padding: 16px;
+        margin-bottom: 12px;
+        box-shadow: 0 4px 14px rgba(120, 70, 30, 0.07);
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+      .grid .card {
+        margin: 0;
+        text-align: center;
+      }
+      .emoji {
+        font-size: 3rem;
+        line-height: 1.1;
+      }
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+      }
+      .mute {
+        color: var(--mute);
+        font-size: 0.9rem;
+      }
+      .price {
+        font-weight: 700;
+        color: var(--acc);
+        font-size: 1.1rem;
+      }
+      .qty {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 14px;
+        margin-top: 10px;
+      }
+      .qty button {
+        width: 34px;
+        height: 34px;
+        padding: 0;
+        font-size: 1.2rem;
+      }
+      .badge {
+        font-size: 0.75rem;
+        padding: 2px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+      }
+      .badge.done {
+        color: var(--ok);
+        border-color: var(--ok);
+      }
+      .hide {
+        display: none;
+      }
+      .pay img {
+        max-width: 240px;
+        width: 100%;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        display: block;
+        margin: 8px 0;
+      }
+      .err {
+        color: var(--acc);
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hero">
+      <h1 id="biz"></h1>
+      <p id="tag"></p>
+    </div>
+    <div class="wrap">
+      <div class="nav">
+        <button id="tShop" class="on">Order</button
+        ><button id="tAdmin" class="ghost">Admin</button>
+      </div>
+
+      <section id="shop">
+        <div id="items" class="grid"></div>
+        <div class="card">
+          <h3 style="margin-bottom: 8px">Your order</h3>
+          <div id="cart" class="mute">Nothing selected yet.</div>
+          <div class="row" style="margin: 10px 0">
+            <strong>Total</strong
+            ><strong id="total" class="price">₱0.00</strong>
+          </div>
+          <label>Name<input id="cName" autocomplete="name" /></label>
+          <label>Phone or email<input id="cContact" /></label>
+          <label
+            >Notes (optional)<textarea id="cNote" rows="2"></textarea>
+          </label>
+          <label
+            >Payment<select id="cPay">
+              <option value="gcash">GCash (scan QR)</option>
+              <option value="cash">Cash on pickup</option>
+            </select></label
+          >
+          <button id="place" style="width: 100%">Place order</button>
+          <div id="msg" class="mute" style="margin-top: 8px"></div>
+        </div>
+        <div id="myOrder" class="card hide"></div>
+      </section>
+
+      <section id="admin" class="hide">
+        <div id="login" class="card">
+          <h3 style="margin-bottom: 8px">Admin login</h3>
+          <label
+            >Email<input id="aEmail" type="email" autocomplete="username"
+          /></label>
+          <label
+            >Password<input
+              id="aPass"
+              type="password"
+              autocomplete="current-password"
+          /></label>
+          <button id="doLogin">Log in</button>
+          <div id="aErr" class="err"></div>
+        </div>
+        <div id="panel" class="hide">
+          <div class="row" style="margin-bottom: 8px">
+            <h2>Orders</h2>
+            <button class="ghost sm" id="logout">Log out</button>
+          </div>
+          <div id="orders"></div>
+          <h2 style="margin: 16px 0 8px">Products</h2>
+          <div class="card">
+            <label>Name<input id="pName" /></label>
+            <label
+              >Price<input id="pPrice" type="number" step="0.01" min="0"
+            /></label>
+            <label>Description<input id="pDesc" /></label>
+            <button id="addP">Add product</button>
+          </div>
+          <div id="plist"></div>
+        </div>
+      </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+    <script>
+      /* ====== EDIT THESE ====== */
+      const BUSINESS_NAME = "My Small Business";
+      const TAGLINE = "Fresh treats, made with love";
+      const CURRENCY = "₱"; // Philippine peso
+      const GCASH_NAME = ""; // name on your GCash account (optional)
+      const GCASH_NUMBER = ""; // your GCash number (optional)
+      const QR_IMAGE = "gcash-qr.png"; // put your GCash QR image in the same folder
+      const SUPABASE_URL = "YOUR_SUPABASE_URL"; // Supabase > Project Settings > API
+      const SUPABASE_KEY = "YOUR_SUPABASE_ANON_KEY"; // the "anon public" key
+      /* Shown on the site until you add your own products in the Admin tab */
+      const DEFAULT_PRODUCTS = [
+        {
+          id: "default-donut",
+          name: "Donut",
+          price: 25,
+          description: "Freshly made, soft and sweet",
+        },
+        {
+          id: "default-mango",
+          name: "Mango Float",
+          price: 120,
+          description: "Creamy layers of mango, cream and graham",
+        },
+      ];
+      /* ======================== */
+
+      const $ = (id) => document.getElementById(id);
+      const money = (n) => CURRENCY + Number(n || 0).toFixed(2);
+      const esc = (s) =>
+        String(s == null ? "" : s).replace(
+          /[&<>"]/g,
+          (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c],
+        );
+      const icon = (n) =>
+        /donut|doughnut/i.test(n)
+          ? "🍩"
+          : /mango/i.test(n)
+            ? "🥭"
+            : /cake/i.test(n)
+              ? "🍰"
+              : /coffee/i.test(n)
+                ? "☕"
+                : "🛍️";
+      document.title = BUSINESS_NAME;
+      $("biz").textContent = BUSINESS_NAME;
+      $("tag").textContent = TAGLINE;
+
+      let sb = null,
+        products = DEFAULT_PRODUCTS.slice(),
+        orders = [],
+        cart = {},
+        isAdmin = false;
+      if (SUPABASE_URL.startsWith("http"))
+        sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      function renderShop() {
+        $("items").innerHTML = products.length
+          ? products
+              .map(
+                (
+                  p,
+                ) => `<div class="card"><div class="emoji">${icon(p.name)}</div><strong>${esc(p.name)}</strong>
+  <div class="mute">${esc(p.description)}</div><div class="price">${money(p.price)}</div>
+  <div class="qty"><button class="ghost" data-m="${p.id}">−</button><span>${cart[p.id] || 0}</span><button data-p="${p.id}">+</button></div></div>`,
+              )
+              .join("")
+          : '<div class="card mute">No products yet.</div>';
+        const lines = products.filter((p) => cart[p.id]);
+        $("cart").innerHTML = lines.length
+          ? lines
+              .map(
+                (p) =>
+                  `<div class="row"><span>${cart[p.id]} × ${esc(p.name)}</span><span>${money(cart[p.id] * p.price)}</span></div>`,
+              )
+              .join("")
+          : "Nothing selected yet.";
+        $("total").textContent = money(
+          lines.reduce((s, p) => s + cart[p.id] * p.price, 0),
+        );
+      }
+      function renderAdmin() {
+        $("orders").innerHTML = orders.length
+          ? orders
+              .map(
+                (
+                  o,
+                ) => `<div class="card"><div class="row"><strong>${esc(o.name)}</strong><span class="badge ${["done", "paid"].includes(o.status) ? "done" : ""}">${esc(o.status)}</span></div>
+  <div class="mute">${esc(o.contact)} · ${new Date(o.created_at).toLocaleString()}</div>
+  <div class="mute">${o.payment_method === "gcash" ? "GCash" + (o.payment_ref ? " · ref " + esc(o.payment_ref) : " · no reference yet") : "Cash on pickup"}</div>
+  <div>${(o.items || []).map((i) => `${i.qty} × ${esc(i.name)}`).join(", ")}</div>
+  ${o.note ? `<div class="mute">“${esc(o.note)}”</div>` : ""}
+  <div class="row" style="margin-top:10px"><span class="price">${money(o.total)}</span><span><button class="sm" data-s="paid:${o.id}">Paid</button> <button class="sm" data-s="done:${o.id}">Done</button> <button class="sm ghost" data-s="cancelled:${o.id}">Cancel</button> <button class="sm ghost" data-d="${o.id}">Delete</button></span></div></div>`,
+              )
+              .join("")
+          : '<div class="card mute">No orders yet.</div>';
+        $("plist").innerHTML = products
+          .map(
+            (p) =>
+              `<div class="card row"><span>${esc(p.name)} · ${money(p.price)}</span>${String(p.id).startsWith("default-") ? '<span class="mute">sample</span>' : `<button class="sm ghost" data-x="${p.id}">Remove</button>`}</div>`,
+          )
+          .join("");
+      }
+      async function loadProducts() {
+        const { data } = await sb
+          .from("products")
+          .select("*")
+          .order("created_at");
+        products = data && data.length ? data : DEFAULT_PRODUCTS;
+        renderShop();
+        renderAdmin();
+      }
+      async function loadOrders() {
+        const { data } = await sb
+          .from("orders")
+          .select("*")
+          .order("created_at", { ascending: false });
+        orders = data || [];
+        renderAdmin();
+      }
+      function setAdmin(on) {
+        isAdmin = on;
+        $("login").classList.toggle("hide", on);
+        $("panel").classList.toggle("hide", !on);
+        if (on) loadOrders();
+      }
+
+      $("items").onclick = (e) => {
+        const p = e.target.dataset.p,
+          m = e.target.dataset.m;
+        if (p) cart[p] = (cart[p] || 0) + 1;
+        if (m && cart[m]) {
+          cart[m]--;
+          if (!cart[m]) delete cart[m];
+        }
+        renderShop();
+      };
+      $("place").onclick = async () => {
+        if (!sb) {
+          $("msg").textContent =
+            "Preview mode: add your Supabase URL and key in index.html to take real orders.";
+          return;
+        }
+        const lines = products.filter((p) => cart[p.id]);
+        const name = $("cName").value.trim(),
+          contact = $("cContact").value.trim();
+        if (!lines.length) {
+          $("msg").textContent = "Please select at least one item.";
+          return;
+        }
+        if (!name || !contact) {
+          $("msg").textContent = "Please add your name and contact.";
+          return;
+        }
+        $("place").disabled = true;
+        const id = crypto.randomUUID(),
+          token = crypto.randomUUID(),
+          method = $("cPay").value;
+        const items = lines.map((p) => ({
+          name: p.name,
+          qty: cart[p.id],
+          price: p.price,
+        }));
+        const total = lines.reduce((s, p) => s + cart[p.id] * p.price, 0);
+        const { error } = await sb
+          .from("orders")
+          .insert({
+            id,
+            cancel_token: token,
+            name,
+            contact,
+            note: $("cNote").value.trim(),
+            items,
+            total,
+            payment_method: method,
+          });
+        $("place").disabled = false;
+        if (error) {
+          $("msg").textContent =
+            "Sorry, the order could not be sent. Please try again.";
+          return;
+        }
+        mine = { id, token, items, total, method };
+        saveMine();
+        renderMine();
+        cart = {};
+        $("cNote").value = "";
+        $("msg").textContent = "";
+        renderShop();
+        $("myOrder").scrollIntoView({ behavior: "smooth" });
+      };
+      $("doLogin").onclick = async () => {
+        if (!sb) {
+          $("aErr").textContent =
+            "Add your Supabase URL and key in index.html first.";
+          return;
+        }
+        const { error } = await sb.auth.signInWithPassword({
+          email: $("aEmail").value.trim(),
+          password: $("aPass").value,
+        });
+        $("aErr").textContent = error ? "Wrong email or password." : "";
+        if (!error) {
+          $("aPass").value = "";
+          setAdmin(true);
+        }
+      };
+      $("logout").onclick = async () => {
+        await sb.auth.signOut();
+        setAdmin(false);
+      };
+      $("addP").onclick = async () => {
+        const name = $("pName").value.trim(),
+          price = parseFloat($("pPrice").value);
+        if (!name || isNaN(price)) return;
+        await sb
+          .from("products")
+          .insert({ name, price, description: $("pDesc").value.trim() });
+        ["pName", "pPrice", "pDesc"].forEach((k) => ($(k).value = ""));
+        loadProducts();
+      };
+      $("admin").onclick = async (e) => {
+        const t = e.target.dataset;
+        if (t.x) {
+          await sb.from("products").delete().eq("id", t.x);
+          loadProducts();
+        }
+        if (t.d) {
+          await sb.from("orders").delete().eq("id", t.d);
+          loadOrders();
+        }
+        if (t.s) {
+          const [st, id] = t.s.split(":");
+          await sb.from("orders").update({ status: st }).eq("id", id);
+          loadOrders();
+        }
+      };
+      let mine = null;
+      try {
+        mine = JSON.parse(localStorage.getItem("myOrder") || "null");
+      } catch (e) {}
+      function saveMine() {
+        try {
+          if (mine) localStorage.setItem("myOrder", JSON.stringify(mine));
+          else localStorage.removeItem("myOrder");
+        } catch (e) {}
+      }
+      function renderMine() {
+        const el = $("myOrder");
+        if (!mine) {
+          el.classList.add("hide");
+          return;
+        }
+        el.classList.remove("hide");
+        let h = `<h3 style="margin-bottom:8px">Your order</h3><div>${mine.items.map((i) => `${i.qty} × ${esc(i.name)}`).join(", ")}</div><div class="price" style="margin:6px 0">Total ${money(mine.total)}</div>`;
+        if (mine.cancelled) {
+          h +=
+            '<p class="err">This order was cancelled.</p><button class="ghost sm" id="newOrder">Start new order</button>';
+        } else {
+          if (mine.method === "gcash") {
+            h += `<div class="pay"><p>Scan to pay <b>${money(mine.total)}</b> with GCash${GCASH_NAME ? " to <b>" + esc(GCASH_NAME) + "</b>" : ""}${GCASH_NUMBER ? " (" + esc(GCASH_NUMBER) + ")" : ""}:</p><img src="${QR_IMAGE}" alt="GCash QR" onerror="this.outerHTML='<p class=mute>QR image not found. Add gcash-qr.png next to index.html.</p>'">`;
+            h += mine.ref
+              ? `<p>Reference no. sent: <b>${esc(mine.ref)}</b>. We will confirm your payment.</p>`
+              : '<label>GCash reference number<input id="refNo"></label><button id="sendRef">I have paid - send reference</button>';
+            h += "</div>";
+          } else
+            h += '<p class="mute">Please pay in cash when you pick up.</p>';
+          h +=
+            '<div style="margin-top:12px"><button class="ghost sm" id="cancelOrder">Cancel order</button> <button class="ghost sm" id="newOrder">Start new order</button></div>';
+        }
+        el.innerHTML =
+          h + '<div id="mineMsg" class="mute" style="margin-top:8px"></div>';
+      }
+      $("myOrder").onclick = async (e) => {
+        const id = e.target.id,
+          say = (t) => {
+            $("mineMsg").textContent = t;
+          };
+        if (id === "sendRef") {
+          const ref = $("refNo").value.trim();
+          if (!ref) {
+            say("Please enter the reference number.");
+            return;
+          }
+          const { data, error } = await sb.rpc("submit_payment", {
+            p_id: mine.id,
+            p_token: mine.token,
+            p_ref: ref,
+          });
+          if (error || !data) {
+            say("Could not save the reference. Please contact us.");
+            return;
+          }
+          mine.ref = ref;
+          saveMine();
+          renderMine();
+        }
+        if (id === "cancelOrder") {
+          if (!confirm("Cancel this order?")) return;
+          const { data, error } = await sb.rpc("cancel_order", {
+            p_id: mine.id,
+            p_token: mine.token,
+          });
+          if (error || !data) {
+            say(
+              "This order can no longer be cancelled online. Please contact us.",
+            );
+            return;
+          }
+          mine.cancelled = true;
+          saveMine();
+          renderMine();
+        }
+        if (id === "newOrder") {
+          mine = null;
+          saveMine();
+          renderMine();
+        }
+      };
+      function tab(a) {
+        $("shop").classList.toggle("hide", a);
+        $("admin").classList.toggle("hide", !a);
+        $("tShop").className = a ? "ghost" : "on";
+        $("tAdmin").className = a ? "on" : "ghost";
+      }
+      $("tShop").onclick = () => tab(false);
+      $("tAdmin").onclick = () => tab(true);
+
+      renderShop();
+      if (sb) {
+        renderShop();
+        loadProducts();
+        renderMine();
+        sb.auth.getSession().then(({ data }) => {
+          if (data.session) setAdmin(true);
+        });
+      }
+    </script>
+  </body>
+</html>
