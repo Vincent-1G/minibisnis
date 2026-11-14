@@ -288,8 +288,8 @@
       const GCASH_NAME = ""; // name on your GCash account (optional)
       const GCASH_NUMBER = ""; // your GCash number (optional)
       const QR_IMAGE = "gcash-qr.png"; // put your GCash QR image in the same folder
-      const SUPABASE_URL = "YOUR_SUPABASE_URL"; // Supabase > Project Settings > API
-      const SUPABASE_KEY = "YOUR_SUPABASE_ANON_KEY"; // the "anon public" key
+      const SUPABASE_URL = "sb_publishable_q44ZPuu7JmDjfSxoN0r2CQ_KFTKJO8B"; // Supabase > Project Settings > API
+      const SUPABASE_KEY = "https://qnpcefubiucnbpgqylwv.supabase.co/rest/v1/"; // the "anon public" key
       /* Shown on the site until you add your own products in the Admin tab */
       const DEFAULT_PRODUCTS = [
         {
@@ -444,18 +444,16 @@
           price: p.price,
         }));
         const total = lines.reduce((s, p) => s + cart[p.id] * p.price, 0);
-        const { error } = await sb
-          .from("orders")
-          .insert({
-            id,
-            cancel_token: token,
-            name,
-            contact,
-            note: $("cNote").value.trim(),
-            items,
-            total,
-            payment_method: method,
-          });
+        const { error } = await sb.from("orders").insert({
+          id,
+          cancel_token: token,
+          name,
+          contact,
+          note: $("cNote").value.trim(),
+          items,
+          total,
+          payment_method: method,
+        });
         $("place").disabled = false;
         if (error) {
           $("msg").textContent =
